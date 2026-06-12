@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DS BÜREAU — Concept 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500&family=Alexandria:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #050508;
+    --accent:    #414ed9;
+    --accent-border: #6673ff;
+    --accent-bg: rgba(65,78,217,0.4);
+    --text-1:    #e5e5e5;
+    --text-2:    #999;
+    --border:    #666;
+    --pill-border: rgba(77,91,255,0.6);
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text-1);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── GLOW ── */
+  .glow-orb {
+    position: absolute;
+    left: -182px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(65,78,217,0.28) 0%, transparent 65%);
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: relative;
+    z-index: 10;
+    padding: 30px 120px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1440px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* Logo */
+  .nav-logo {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: 140px;
+  }
+  .nav-logo svg {
+    width: 52px;
+    height: 32px;
+    display: block;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+    text-transform: uppercase;
+    font-size: 16px;
+    letter-spacing: 0.03em;
+  }
+  .nav-links a {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 400;
+    color: var(--text-2);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a.active, .nav-links a:hover { color: var(--text-1); }
+
+  .nav-right { width: 140px; display: flex; justify-content: flex-end; }
+  .nav-cta {
+    background: var(--accent-bg);
+    color: #fff;
+    border: 1px solid var(--accent-border);
+    border-radius: 8px;
+    padding: 10px 32px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.07px;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: rgba(65,78,217,0.6); transform: translateY(-1px); }
+
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+  .nav-hamburger span {
+    display: block;
+    width: 22px; height: 2px;
+    background: var(--text-1);
+    border-radius: 2px;
+  }
+
+  /* ── HERO ── */
+  .hero-wrapper {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero {
+    position: relative;
+    z-index: 1;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 120px 80px;
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    align-items: center;
+    gap: 48px;
+    min-height: calc(100vh - 100px);
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* Pill */
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--pill-border);
+    border-radius: 24px;
+    padding: 10px 20px 10px 16px;
+    font-size: 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.06px;
+    text-transform: uppercase;
+    color: #fff;
+    backdrop-filter: blur(20px);
+    width: fit-content;
+  }
+  .hero-badge-dot {
+    width: 9px; height: 9px;
+    background: #5b69ff;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 6px #5b69ff;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:1; box-shadow:0 0 6px #5b69ff; }
+    50%      { opacity:.6; box-shadow:0 0 14px #5b69ff; }
+  }
+
+  .hero-heading {
+    font-family: 'Alexandria', sans-serif;
+    font-size: clamp(36px, 3.75vw, 54px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: 0.27px;
+    color: var(--text-1);
+    max-width: 661px;
+    position: relative;
+  }
+
+  .hero-heading .glitch-char {
+    display: inline;
+    transition: color 0.05s;
+  }
+  .hero-heading .glitch-char.scrambling {
+    color: #5b69ff;
+    opacity: 0.85;
+  }
+  .hero-heading .glitch-char.resolving {
+    color: #98a4ff;
+    opacity: 1;
+  }
+
+  @keyframes glitch-skew {
+    0%   { transform: skewX(0deg); }
+    20%  { transform: skewX(-1.5deg); }
+    40%  { transform: skewX(1deg); }
+    60%  { transform: skewX(-0.5deg); }
+    80%  { transform: skewX(0.8deg); }
+    100% { transform: skewX(0deg); }
+  }
+  .hero-heading.glitching {
+    animation: glitch-skew 0.4s ease-in-out;
+  }
+
+  .hero-sub {
+    font-family: 'Alexandria', sans-serif;
+    font-size: clamp(14px, 1.1vw, 16px);
+    font-weight: 300;
+    line-height: 1.5;
+    color: #d9d9d9;
+    max-width: 583px;
+  }
+
+  /* Buttons */
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+
+  .btn-primary {
+    background: var(--accent-bg);
+    color: #fff;
+    border: 1px solid var(--accent-border);
+    border-radius: 8px;
+    padding: 13px 32px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.07px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex; align-items: center;
+    transition: background 0.2s, transform 0.15s;
+    height: 44px;
+  }
+  .btn-primary:hover { background: rgba(65,78,217,0.6); transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 13px 16px 13px 24px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.07px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 4px;
+    transition: border-color 0.2s, transform 0.15s;
+    height: 44px;
+  }
+  .btn-secondary:hover { border-color: var(--text-1); transform: translateY(-1px); }
+  .btn-arrow { font-size: 16px; transition: transform 0.2s; }
+  .btn-secondary:hover .btn-arrow { transform: translateX(3px); }
+
+  /* ── ASCII CUBE ── */
+  .hero-right {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: -24px;
+  }
+  .cube-frame {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: transparent;
+    position: relative;
+  }
+  .cube-frame canvas { display: block; width: 100% !important; height: 100% !important; }
+  #c3d { display: none; }
+  #ascii-canvas { display: block; width: 100%; height: 100%; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    nav { padding: 24px 48px 0; }
+    .hero { padding: 48px 48px 60px; gap: 32px; }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px 0; }
+    .nav-links { display: none; }
+    .nav-right { display: none; }
+    .nav-hamburger { display: flex; }
+    .nav-logo { width: auto; }
+
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 40px 24px 60px;
+      min-height: auto;
+      gap: 40px;
+    }
+    .hero-right { order: 1; margin-right: 0; }
+    .hero-heading { font-size: clamp(28px, 6vw, 42px); max-width: 100%; }
+    .hero-sub { max-width: 100%; }
+  }
+
+  @media (max-width: 540px) {
+    .hero-actions { gap: 12px; }
+    .btn-primary, .btn-secondary { font-size: 13px; }
+  }
+
+  /* Mobile nav drawer */
+  .nav-drawer {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(5,5,8,0.97);
+    z-index: 100;
+    flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 32px;
+  }
+  .nav-drawer.open { display: flex; }
+  .nav-drawer a {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-1);
+    text-decoration: none;
+  }
+  .nav-drawer-close {
+    position: absolute; top: 24px; right: 28px;
+    background: none; border: none;
+    color: var(--text-1); font-size: 28px; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<!-- Mobile nav drawer -->
+<div class="nav-drawer" id="drawer">
+  <button class="nav-drawer-close" onclick="toggleDrawer()">✕</button>
+  <a href="#" onclick="toggleDrawer()">Services</a>
+  <a href="#" onclick="toggleDrawer()">Projects</a>
+  <a href="#" onclick="toggleDrawer()">Principles</a>
+  <a href="#" onclick="toggleDrawer()">Awards</a>
+  <button class="nav-cta" style="margin-top:16px;">Say Hello!</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <svg width="52" height="32" viewBox="0 0 52 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13.0625 3.55908C19.9332 3.55908 25.5037 9.12882 25.5039 15.9995L25.5 16.3208C25.3325 22.9367 19.9996 28.2695 13.3838 28.437L13.0625 28.4409H1.47949L1.3916 28.436C0.959442 28.3921 0.62207 28.0272 0.62207 27.5835V4.4165C0.62207 3.97277 0.959458 3.6079 1.3916 3.56396L1.47949 3.55908H13.0625ZM2.28125 26.7817H13.0625C19.0172 26.7817 23.8447 21.9542 23.8447 15.9995C23.8445 10.0449 19.0171 5.21826 13.0625 5.21826H2.28125V26.7817ZM13.5205 7.12549C18.2156 7.36368 21.9492 11.2462 21.9492 16.0005L21.9375 16.4575C21.707 21.001 18.064 24.644 13.5205 24.8745L13.0635 24.8862H4.78906L4.66602 24.8735C4.38689 24.8166 4.17679 24.5699 4.17676 24.2739V7.72607C4.17676 7.4301 4.38686 7.18341 4.66602 7.12646L4.78906 7.11377H13.0635L13.5205 7.12549ZM5.83594 23.2271H13.0635C17.0546 23.2267 20.2897 19.9917 20.29 16.0005C20.29 12.009 17.0548 8.77328 13.0635 8.77295H5.83594V23.2271ZM13.3379 10.6753C16.1547 10.8184 18.3945 13.1481 18.3945 16.0005L18.3877 16.2749C18.2492 19.0006 16.0636 21.1862 13.3379 21.3247L13.0635 21.3315H8.09863C7.89595 21.3315 7.73164 21.167 7.73145 20.9644V11.0356C7.73152 10.8329 7.89587 10.6685 8.09863 10.6685H13.0635L13.3379 10.6753ZM9.39062 19.6733H13.0635C15.0915 19.673 16.736 18.0285 16.7363 16.0005C16.7363 13.9722 15.0917 12.328 13.0635 12.3276H9.39062V19.6733ZM13.0625 14.2231C14.0439 14.2231 14.8396 15.0181 14.8398 15.9995C14.8398 16.9811 14.044 17.7769 13.0625 17.7769H11.5498C11.404 17.7769 11.2852 17.659 11.2852 17.5132V14.4868C11.2852 14.3409 11.4039 14.2231 11.5498 14.2231H13.0625Z" fill="#6673FF"/>
+      <path d="M43.0215 11.4731C47.6365 11.4734 51.3779 15.2155 51.3779 19.8306C51.3776 24.4454 47.6363 28.1867 43.0215 28.187H28.9775C28.5289 28.187 28.1652 27.8231 28.165 27.3745C28.165 26.9258 28.5288 26.562 28.9775 26.562H43.0215C46.7389 26.5617 49.7526 23.548 49.7529 19.8306C49.7529 16.1129 46.7391 13.0984 43.0215 13.0981H35.0127C34.5641 13.0981 34.2003 12.7342 34.2002 12.2856C34.2004 11.8371 34.5641 11.4731 35.0127 11.4731H43.0215ZM47.0352 7.52686C47.4837 7.52699 47.8475 7.89084 47.8477 8.33936C47.8477 8.78798 47.4838 9.15172 47.0352 9.15186H35.1045C33.438 9.1519 32.0871 10.503 32.0869 12.1694C32.0869 13.836 33.4379 15.187 35.1045 15.187L43.2295 15.188C45.7933 15.1883 47.8721 17.2667 47.8721 19.8306C47.8718 22.3942 45.7931 24.4728 43.2295 24.4731H31.2988C30.8503 24.4731 30.4866 24.1091 30.4863 23.6606C30.4863 23.2119 30.8501 22.8482 31.2988 22.8481H43.2295C44.8957 22.8478 46.2468 21.4968 46.2471 19.8306C46.2471 18.1641 44.8959 16.8133 43.2295 16.813L35.1045 16.812C32.5405 16.812 30.4619 14.7335 30.4619 12.1694C30.4621 9.60556 32.5406 7.5269 35.1045 7.52686H47.0352ZM49.4043 3.81299C49.853 3.81299 50.2168 4.17678 50.2168 4.62549C50.2168 5.0742 49.853 5.43799 49.4043 5.43799H35.3604C31.6427 5.43815 28.6291 8.45181 28.6289 12.1694C28.6289 15.8872 31.6426 18.9017 35.3604 18.9019H43.3691C43.8178 18.9019 44.1816 19.2656 44.1816 19.7144C44.1814 20.1629 43.8177 20.5269 43.3691 20.5269H35.3604C30.7452 20.5267 27.0039 16.7846 27.0039 12.1694C27.0041 7.55439 30.7453 3.81315 35.3604 3.81299H49.4043Z" fill="#6673FF"/>
+    </svg>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Services</a></li>
+    <li><a href="#">Projects</a></li>
+    <li><a href="#">Principles</a></li>
+    <li><a href="#">Awards</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-cta">Say Hello!</button>
+  </div>
+  <button class="nav-hamburger" onclick="toggleDrawer()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="hero-wrapper">
+  <div class="glow-orb"></div>
+  <section class="hero">
+    <!-- Left: copy -->
+    <div class="hero-left">
+      <div class="hero-copy">
+        <div class="hero-badge">
+          <div class="hero-badge-dot"></div>
+          Who We Are
+        </div>
+        <h1 class="hero-heading" id="glitch-heading">Our team delivers impactful solutions</h1>
+        <p class="hero-sub">We specialize in creating digital experiences and sustainable designs that resonate with audiences.</p>
+      </div>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Start a Project</a>
+        <a href="#" class="btn-secondary">Learn More <span class="btn-arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- Right: ASCII cube -->
+    <div class="hero-right">
+      <div class="cube-frame" id="cube-wrap">
+        <canvas id="c3d"></canvas>
+        <canvas id="ascii-canvas"></canvas>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+function toggleDrawer() {
+  document.getElementById('drawer').classList.toggle('open');
+}
+</script>
+
+<script>
+(function(){
+  const THREEJS_URL   = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+  const SVGLOADER_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/SVGLoader.js';
+
+  const D_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 211 211"><path d="M181 105.5C181 63.8025 147.198 30 105.5 30H30V181H105.5C147.198 181 181 147.198 181 105.5ZM191 105.5C191 152.72 152.72 191 105.5 191H20V20H105.5C152.72 20 191 58.2797 191 105.5Z"/><path d="M201 105.5C201 52.7568 158.243 10 105.5 10H10V201H105.5C158.243 201 201 158.243 201 105.5ZM211 105.5C211 163.766 163.766 211 105.5 211H0V0H105.5C163.766 0 211 47.234 211 105.5Z"/><path d="M161 105.5C161 74.2959 135.704 49 104.5 49H50V162H104.5C135.704 162 161 136.704 161 105.5ZM171 105.5C171 142.227 141.227 172 104.5 172H40V39H104.5C141.227 39 171 68.7731 171 105.5Z"/><path d="M141 105.5C141 85.3416 124.658 69 104.5 69H70V142H104.5C124.658 142 141 125.658 141 105.5ZM151 105.5C151 131.181 130.181 152 104.5 152H60V59H104.5C130.181 59 151 79.8188 151 105.5Z"/><path d="M121 105.5C121 96.3873 113.613 89 104.5 89H90V122H104.5C113.613 122 121 114.613 121 105.5ZM131 105.5C131 120.136 119.136 132 104.5 132H80V79H104.5C119.136 79 131 90.8645 131 105.5Z"/><path d="M99 99H104.5C108.09 99 111 101.91 111 105.5C111 109.09 108.09 112 104.5 112H99V99Z"/></svg>`;
+
+  const S_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 208 211"><path d="M208 65H72C69.7909 65 68 66.7909 68 69C68 71.2091 69.7909 73 72 73H139C177.108 73 208 103.892 208 142C208 180.108 177.108 211 139 211H0V201H139C171.585 201 198 174.585 198 142C198 109.415 171.585 83 139 83H72C64.268 83 58 76.732 58 69C58 61.268 64.268 55 72 55H208V65ZM208 38V48H71C58.8497 48 49 56.8497 49 69C49 81.1503 58.8497 92 71 92H139C166.614 92 189 114.386 189 142C189 169.614 166.614 192 139 192H0V182H139C161.091 182 179 164.091 179 142C179 119.909 161.091 102 139 102H71C53.3269 102 39 86.6731 39 69C39 51.3269 53.3269 38 71 38H208ZM208 30H69C46.9086 30 29 46.9086 29 69C29 91.0914 46.9086 110 69 110H137C154.673 110 169 124.327 169 142C169 159.673 154.673 174 137 174H0V164H137C149.15 164 159 154.15 159 142C159 129.85 149.15 120 137 120H69C41.3858 120 19 96.6142 19 69C19 41.3858 41.3858 20 69 20H208V30ZM208 10H69C36.4152 10 10 36.4152 10 69C10 101.585 36.4152 128 69 128H136C143.732 128 150 134.268 150 142C150 149.732 143.732 156 136 156H0V146H136C138.209 146 140 144.209 140 142C140 139.791 138.209 138 136 138H69C30.8923 138 0 107.108 0 69C0 30.8924 30.8923 0 69 0H208V10Z"/></svg>`;
+
+  function loadScript(src, cb) {
+    const s = document.createElement('script');
+    s.src = src; s.onload = cb;
+    document.head.appendChild(s);
+  }
+
+  function buildCube() {
+    const wrap      = document.getElementById('cube-wrap');
+    const offscreen = document.getElementById('c3d');
+    const asciiCv   = document.getElementById('ascii-canvas');
+
+    function setup() {
+      const W = wrap.clientWidth;
+      const H = wrap.clientHeight;
+      const FONT_SIZE = Math.max(5, Math.round(W / 110));
+      const CHAR_W = FONT_SIZE * 0.60;
+      const CHAR_H = FONT_SIZE * 1.00;
+      const COLS = Math.floor(W / CHAR_W);
+      const ROWS = Math.floor(H / CHAR_H);
+      asciiCv.width  = W;
+      asciiCv.height = H;
+      offscreen.width  = COLS;
+      offscreen.height = ROWS;
+      return { W, H, COLS, ROWS, CHAR_W, CHAR_H, FONT_SIZE };
+    }
+
+    let dims = setup();
+
+    const renderer = new THREE.WebGLRenderer({ canvas: offscreen, antialias: false });
+    renderer.setPixelRatio(1);
+    renderer.setClearColor(0x000000, 1);
+
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(52, dims.COLS / dims.ROWS, 0.1, 100);
+    camera.position.set(2.53, 2.07, 2.53);
+    camera.lookAt(0, 0, 0);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+    const d1 = new THREE.DirectionalLight(0xffffff, 1.5); d1.position.set(5,8,5);    scene.add(d1);
+    const d2 = new THREE.DirectionalLight(0xaabbff, 0.5); d2.position.set(-5,-3,-5); scene.add(d2);
+    const d3 = new THREE.DirectionalLight(0xffffff, 0.4); d3.position.set(-3,5,-3);  scene.add(d3);
+
+    const matCube = new THREE.MeshPhongMaterial({ color:0x111111, shininess:120, specular:0x888888 });
+    const matLogo = new THREE.MeshPhongMaterial({ color:0x333333, shininess:160, specular:0xbbbbbb });
+
+    const root = new THREE.Group();
+    scene.add(root);
+    root.add(new THREE.Mesh(new THREE.BoxGeometry(2,2,2), matCube));
+
+    const svgLoader = new THREE.SVGLoader();
+    function parseSVG(str) {
+      const shapes = [];
+      svgLoader.parse(str).paths.forEach(p => THREE.SVGLoader.createShapes(p).forEach(s => shapes.push(s)));
+      return shapes;
+    }
+    function buildLogo(shapes, svgW, svgH) {
+      const g = new THREE.Group();
+      const ext = { depth:0.12, bevelEnabled:true, bevelThickness:0.015, bevelSize:0.015, bevelSegments:3 };
+      shapes.forEach(shape => g.add(new THREE.Mesh(new THREE.ExtrudeGeometry(shape, ext), matLogo)));
+      const scale = 1.7 / Math.max(svgW, svgH);
+      g.scale.set(scale, -scale, 1);
+      g.position.set(-svgW*scale/2, svgH*scale/2, 0);
+      return g;
+    }
+
+    const dS = parseSVG(D_SVG);
+    const sS = parseSVG(S_SVG);
+    const PI = Math.PI;
+    [
+      { sh:dS, w:211, h:211, p:[0,0,1],  rx:0,     ry:0     },
+      { sh:sS, w:208, h:211, p:[1,0,0],  rx:0,     ry:PI/2  },
+      { sh:dS, w:211, h:211, p:[0,0,-1], rx:0,     ry:PI    },
+      { sh:sS, w:208, h:211, p:[-1,0,0], rx:0,     ry:-PI/2 },
+      { sh:sS, w:208, h:211, p:[0,1,0],  rx:-PI/2, ry:0     },
+      { sh:dS, w:211, h:211, p:[0,-1,0], rx:PI/2,  ry:0     },
+    ].forEach(({sh,w,h,p,rx,ry}) => {
+      const wr = new THREE.Group();
+      wr.add(buildLogo(sh,w,h));
+      wr.position.set(...p);
+      wr.rotation.set(rx,ry,0);
+      root.add(wr);
+    });
+
+    root.rotation.x = 0.42;
+    root.rotation.y = 0.65;
+
+    const ctx = asciiCv.getContext('2d');
+    const sample = document.createElement('canvas');
+    const sctx = sample.getContext('2d');
+
+    function updateRendererSize() {
+      dims = setup();
+      renderer.setSize(dims.COLS, dims.ROWS);
+      camera.aspect = dims.COLS / dims.ROWS;
+      camera.updateProjectionMatrix();
+      sample.width  = dims.COLS;
+      sample.height = dims.ROWS;
+      ctx.font = `bold ${dims.FONT_SIZE}px monospace`;
+      ctx.textBaseline = 'top';
+    }
+    updateRendererSize();
+
+    const RAMP = [
+      ' ', ' ', '·', '.', ',', '`', '\'', ':', ';', '-', '~', '+',
+      '!', 'i', 'l', '|', '/', '\\', 't', 'r', 'f', 'j', 'c', 'n',
+      'u', 'v', 'z', 'x', 'o', 'a', 'k', 'h', 'p', 'q', 'w', 'm',
+      'S', 'S', 'S', 'S', '*', '#', '&', '%', '8', '@', 'D', 'D', 'D', 'D'
+    ];
+
+    function asciiFrame() {
+      renderer.render(scene, camera);
+      sctx.drawImage(offscreen, 0, 0);
+      const img = sctx.getImageData(0, 0, dims.COLS, dims.ROWS);
+
+      ctx.clearRect(0, 0, dims.W, dims.H);
+
+      for (let row = 0; row < dims.ROWS; row++) {
+        for (let col = 0; col < dims.COLS; col++) {
+          const idx = (row * dims.COLS + col) * 4;
+          const r = img.data[idx], g = img.data[idx+1], b = img.data[idx+2];
+          const bright = (0.299*r + 0.587*g + 0.114*b) / 255;
+          if (bright < 0.03) continue;
+          const ch = RAMP[Math.floor(bright * (RAMP.length - 1))];
+          if (ch === ' ') continue;
+          const alpha = Math.min(1, bright * 1.5 + 0.1);
+          ctx.fillStyle = bright < 0.5
+            ? `rgba(91,105,255,${alpha.toFixed(2)})`
+            : `rgba(152,164,255,${alpha.toFixed(2)})`;
+          ctx.fillText(ch, col * dims.CHAR_W, row * dims.CHAR_H);
+        }
+      }
+    }
+
+    let drag = false, mpx = 0, mpy = 0;
+    wrap.addEventListener('mousedown', e => { drag=true; mpx=e.clientX; mpy=e.clientY; });
+    window.addEventListener('mouseup', () => drag=false);
+    window.addEventListener('mousemove', e => {
+      if(!drag) return;
+      root.rotation.y += (e.clientX-mpx)*0.01;
+      root.rotation.x += (e.clientY-mpy)*0.01;
+      mpx=e.clientX; mpy=e.clientY;
+    });
+    wrap.addEventListener('touchstart', e => { drag=true; mpx=e.touches[0].clientX; mpy=e.touches[0].clientY; });
+    window.addEventListener('touchend', () => drag=false);
+    window.addEventListener('touchmove', e => {
+      if(!drag) return;
+      root.rotation.y += (e.touches[0].clientX-mpx)*0.012;
+      root.rotation.x += (e.touches[0].clientY-mpy)*0.012;
+      mpx=e.touches[0].clientX; mpy=e.touches[0].clientY;
+    });
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(updateRendererSize, 120);
+    });
+
+    (function loop(){
+      requestAnimationFrame(loop);
+      if(!drag) root.rotation.y += 0.008;
+      asciiFrame();
+    })();
+  }
+
+  loadScript(THREEJS_URL, () => loadScript(SVGLOADER_URL, buildCube));
+})();
+</script>
+
+<script>
+(function() {
+  const GLITCH_CHARS = 'DS$#@&%ds!?|/\\[]{}01<>';
+  const el = document.getElementById('glitch-heading');
+  const original = el.textContent;
+
+  // Wrap each non-space char in a span
+  el.innerHTML = original.split('').map(ch =>
+    ch === ' ' ? ' ' : `<span class="glitch-char">${ch}</span>`
+  ).join('');
+
+  const spans = Array.from(el.querySelectorAll('.glitch-char'));
+
+  function randChar() {
+    return GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+  }
+
+  function runGlitch() {
+    el.classList.add('glitching');
+    setTimeout(() => el.classList.remove('glitching'), 400);
+
+    const totalDuration = 1400; // ms total animation
+    const resolveDelay  = 60;   // ms between each char resolving
+
+    // Phase 1: scramble all chars rapidly
+    let scrambleInterval = setInterval(() => {
+      spans.forEach(s => {
+        if (s.classList.contains('resolving')) return;
+        s.classList.add('scrambling');
+        s.textContent = randChar();
+      });
+    }, 40);
+
+    // Phase 2: resolve chars one by one left-to-right
+    setTimeout(() => {
+      clearInterval(scrambleInterval);
+      spans.forEach((s, i) => {
+        setTimeout(() => {
+          // brief flicker before final
+          let flickers = 0;
+          const flickerInterval = setInterval(() => {
+            s.textContent = flickers % 2 === 0 ? randChar() : original.replace(/ /g, '').split('')[i] || original[i];
+            flickers++;
+            if (flickers >= 4) {
+              clearInterval(flickerInterval);
+              s.textContent = original.replace(/ /g, '')[
+                spans.indexOf(s)
+              ];
+              // rebuild correct char from original (account for spaces)
+              let charIndex = 0;
+              for (let c = 0; c < original.length; c++) {
+                if (original[c] !== ' ') {
+                  if (charIndex === i) { s.textContent = original[c]; break; }
+                  charIndex++;
+                }
+              }
+              s.classList.remove('scrambling');
+              s.classList.add('resolving');
+              s.style.color = '';
+              s.style.opacity = '';
+              // clean up class after transition
+              setTimeout(() => s.classList.remove('resolving'), 200);
+            }
+          }, 50);
+        }, i * resolveDelay);
+      });
+    }, totalDuration - spans.length * resolveDelay);
+  }
+
+  // Trigger on load, then occasionally repeat
+  window.addEventListener('load', () => {
+    setTimeout(runGlitch, 400);
+    // subtle re-glitch every ~8s
+    setInterval(runGlitch, 8000);
+  });
+})();
+</script>
+</body>
+</html>
