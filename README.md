@@ -1,4 +1,4 @@
-# DS BÜREAU — Hero Section (Concept 2)
+# DS BÜREAU — Hero Section Concept
 
 A responsive hero section for the DS BÜREAU landing page, featuring an interactive ASCII-rendered 3D cube as the hero visual.
 
