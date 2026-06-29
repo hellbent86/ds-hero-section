@@ -6,7 +6,7 @@
 <title>DS BÜREAU — Concept 2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500&family=Alexandria:wght@300;400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500&family=Alexandria:wght@200;300;400;500&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -31,15 +31,16 @@
 
   /* ── GLOW ── */
   .glow-orb {
-    position: absolute;
-    left: -182px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(65,78,217,0.28) 0%, transparent 65%);
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      rgba(65,78,217,0.15) 0%,
+      rgba(65,78,217,0.05) 100%
+    );
     pointer-events: none;
-    border-radius: 50%;
     z-index: 0;
   }
 
@@ -190,20 +191,51 @@
     color: var(--text-1);
     max-width: 661px;
     position: relative;
+    display: block;
+    overflow: hidden;
   }
 
-  .hero-heading .glitch-char {
+  /* Locks the heading's height before glitch fires so nothing below shifts */
+  .heading-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* The real heading stays in flow, holding space — never touched by glitch */
+  .hero-heading {
+    font-family: 'Alexandria', sans-serif;
+    font-size: clamp(36px, 3.75vw, 54px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: 0.27px;
+    color: var(--text-1);
+    max-width: 661px;
+    position: relative;
+    display: block;
+    overflow: hidden;
+  }
+
+  /* Absolutely positioned clone that shows glitch on top */
+  .hero-heading-glitch {
+    position: absolute;
+    inset: 0;
+    font-family: 'Alexandria', sans-serif;
+    font-size: clamp(36px, 3.75vw, 54px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: 0.27px;
+    color: var(--text-1);
+    max-width: 661px;
+    display: block;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .hero-heading-glitch .glitch-char {
     display: inline;
     transition: color 0.05s;
   }
-  .hero-heading .glitch-char.scrambling {
-    color: #5b69ff;
-    opacity: 0.85;
-  }
-  .hero-heading .glitch-char.resolving {
-    color: #98a4ff;
-    opacity: 1;
-  }
+  .hero-heading-glitch .glitch-char.scrambling { color: #5b69ff; opacity: 0.85; }
+  .hero-heading-glitch .glitch-char.resolving  { color: #98a4ff; opacity: 1; }
 
   @keyframes glitch-skew {
     0%   { transform: skewX(0deg); }
@@ -219,9 +251,9 @@
 
   .hero-sub {
     font-family: 'Alexandria', sans-serif;
-    font-size: clamp(14px, 1.1vw, 16px);
-    font-weight: 300;
-    line-height: 1.5;
+    font-size: clamp(16px, 1.1vw, 18px);
+    font-weight: 200;
+    line-height: 1.8;
     color: #d9d9d9;
     max-width: 583px;
   }
@@ -279,7 +311,7 @@
   }
   .cube-frame {
     width: 100%;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 5 / 6;
     background: transparent;
     position: relative;
   }
@@ -316,6 +348,12 @@
     .btn-primary, .btn-secondary { font-size: 13px; }
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .hero-badge-dot { animation: none; }
+    .hero-heading.glitching { animation: none; }
+    .btn-primary, .btn-secondary, .nav-links a, .nav-cta { transition: none; }
+  }
+
   /* Mobile nav drawer */
   .nav-drawer {
     display: none;
@@ -345,9 +383,12 @@
 </head>
 <body>
 
+<!-- Full-page gradient overlay -->
+<div class="glow-orb" aria-hidden="true"></div>
+
 <!-- Mobile nav drawer -->
-<div class="nav-drawer" id="drawer">
-  <button class="nav-drawer-close" onclick="toggleDrawer()">✕</button>
+<div class="nav-drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
+  <button class="nav-drawer-close" onclick="toggleDrawer()" aria-label="Close navigation menu">✕</button>
   <a href="#" onclick="toggleDrawer()">Services</a>
   <a href="#" onclick="toggleDrawer()">Projects</a>
   <a href="#" onclick="toggleDrawer()">Principles</a>
@@ -356,15 +397,15 @@
 </div>
 
 <!-- NAV -->
-<nav>
-  <a class="nav-logo" href="#">
-    <svg width="52" height="32" viewBox="0 0 52 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<nav aria-label="Main navigation">
+  <a class="nav-logo" href="#" aria-label="DS BÜREAU — Home">
+    <svg width="52" height="32" viewBox="0 0 52 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
       <path d="M13.0625 3.55908C19.9332 3.55908 25.5037 9.12882 25.5039 15.9995L25.5 16.3208C25.3325 22.9367 19.9996 28.2695 13.3838 28.437L13.0625 28.4409H1.47949L1.3916 28.436C0.959442 28.3921 0.62207 28.0272 0.62207 27.5835V4.4165C0.62207 3.97277 0.959458 3.6079 1.3916 3.56396L1.47949 3.55908H13.0625ZM2.28125 26.7817H13.0625C19.0172 26.7817 23.8447 21.9542 23.8447 15.9995C23.8445 10.0449 19.0171 5.21826 13.0625 5.21826H2.28125V26.7817ZM13.5205 7.12549C18.2156 7.36368 21.9492 11.2462 21.9492 16.0005L21.9375 16.4575C21.707 21.001 18.064 24.644 13.5205 24.8745L13.0635 24.8862H4.78906L4.66602 24.8735C4.38689 24.8166 4.17679 24.5699 4.17676 24.2739V7.72607C4.17676 7.4301 4.38686 7.18341 4.66602 7.12646L4.78906 7.11377H13.0635L13.5205 7.12549ZM5.83594 23.2271H13.0635C17.0546 23.2267 20.2897 19.9917 20.29 16.0005C20.29 12.009 17.0548 8.77328 13.0635 8.77295H5.83594V23.2271ZM13.3379 10.6753C16.1547 10.8184 18.3945 13.1481 18.3945 16.0005L18.3877 16.2749C18.2492 19.0006 16.0636 21.1862 13.3379 21.3247L13.0635 21.3315H8.09863C7.89595 21.3315 7.73164 21.167 7.73145 20.9644V11.0356C7.73152 10.8329 7.89587 10.6685 8.09863 10.6685H13.0635L13.3379 10.6753ZM9.39062 19.6733H13.0635C15.0915 19.673 16.736 18.0285 16.7363 16.0005C16.7363 13.9722 15.0917 12.328 13.0635 12.3276H9.39062V19.6733ZM13.0625 14.2231C14.0439 14.2231 14.8396 15.0181 14.8398 15.9995C14.8398 16.9811 14.044 17.7769 13.0625 17.7769H11.5498C11.404 17.7769 11.2852 17.659 11.2852 17.5132V14.4868C11.2852 14.3409 11.4039 14.2231 11.5498 14.2231H13.0625Z" fill="#6673FF"/>
       <path d="M43.0215 11.4731C47.6365 11.4734 51.3779 15.2155 51.3779 19.8306C51.3776 24.4454 47.6363 28.1867 43.0215 28.187H28.9775C28.5289 28.187 28.1652 27.8231 28.165 27.3745C28.165 26.9258 28.5288 26.562 28.9775 26.562H43.0215C46.7389 26.5617 49.7526 23.548 49.7529 19.8306C49.7529 16.1129 46.7391 13.0984 43.0215 13.0981H35.0127C34.5641 13.0981 34.2003 12.7342 34.2002 12.2856C34.2004 11.8371 34.5641 11.4731 35.0127 11.4731H43.0215ZM47.0352 7.52686C47.4837 7.52699 47.8475 7.89084 47.8477 8.33936C47.8477 8.78798 47.4838 9.15172 47.0352 9.15186H35.1045C33.438 9.1519 32.0871 10.503 32.0869 12.1694C32.0869 13.836 33.4379 15.187 35.1045 15.187L43.2295 15.188C45.7933 15.1883 47.8721 17.2667 47.8721 19.8306C47.8718 22.3942 45.7931 24.4728 43.2295 24.4731H31.2988C30.8503 24.4731 30.4866 24.1091 30.4863 23.6606C30.4863 23.2119 30.8501 22.8482 31.2988 22.8481H43.2295C44.8957 22.8478 46.2468 21.4968 46.2471 19.8306C46.2471 18.1641 44.8959 16.8133 43.2295 16.813L35.1045 16.812C32.5405 16.812 30.4619 14.7335 30.4619 12.1694C30.4621 9.60556 32.5406 7.5269 35.1045 7.52686H47.0352ZM49.4043 3.81299C49.853 3.81299 50.2168 4.17678 50.2168 4.62549C50.2168 5.0742 49.853 5.43799 49.4043 5.43799H35.3604C31.6427 5.43815 28.6291 8.45181 28.6289 12.1694C28.6289 15.8872 31.6426 18.9017 35.3604 18.9019H43.3691C43.8178 18.9019 44.1816 19.2656 44.1816 19.7144C44.1814 20.1629 43.8177 20.5269 43.3691 20.5269H35.3604C30.7452 20.5267 27.0039 16.7846 27.0039 12.1694C27.0041 7.55439 30.7453 3.81315 35.3604 3.81299H49.4043Z" fill="#6673FF"/>
     </svg>
   </a>
-  <ul class="nav-links">
-    <li><a href="#" class="active">Services</a></li>
+  <ul class="nav-links" role="list">
+    <li><a href="#" class="active" aria-current="page">Services</a></li>
     <li><a href="#">Projects</a></li>
     <li><a href="#">Principles</a></li>
     <li><a href="#">Awards</a></li>
@@ -379,26 +420,28 @@
 
 <!-- HERO -->
 <div class="hero-wrapper">
-  <div class="glow-orb"></div>
-  <section class="hero">
+  <section class="hero" aria-label="Hero">
     <!-- Left: copy -->
     <div class="hero-left">
       <div class="hero-copy">
         <div class="hero-badge">
-          <div class="hero-badge-dot"></div>
-          Who We Are
+          <div class="hero-badge-dot" aria-hidden="true"></div>
+          <span>Who We Are</span>
         </div>
-        <h1 class="hero-heading" id="glitch-heading">Our team delivers impactful solutions</h1>
-        <p class="hero-sub">We specialize in creating digital experiences and sustainable designs that resonate with audiences.</p>
+        <div class="heading-wrap" id="heading-wrap">
+          <h1 class="hero-heading" id="glitch-heading-real">Turning your ideas into impactful solutions</h1>
+          <div class="hero-heading-glitch" id="glitch-heading" aria-hidden="true"></div>
+        </div>
+        <p class="hero-sub">We partner with founders, brands, and product teams to craft digital experiences that are as thoughtful as they are beautiful. From early-stage concepts to fully realised products, we bring strategic thinking and hands-on design craft to every project.</p>
       </div>
       <div class="hero-actions">
         <a href="#" class="btn-primary">Start a Project</a>
-        <a href="#" class="btn-secondary">Learn More <span class="btn-arrow">→</span></a>
+        <a href="#" class="btn-secondary">Learn More <span class="btn-arrow" aria-hidden="true">→</span></a>
       </div>
     </div>
 
     <!-- Right: ASCII cube -->
-    <div class="hero-right">
+    <div class="hero-right" aria-hidden="true">
       <div class="cube-frame" id="cube-wrap">
         <canvas id="c3d"></canvas>
         <canvas id="ascii-canvas"></canvas>
@@ -593,26 +636,40 @@ function toggleDrawer() {
 <script>
 (function() {
   const GLITCH_CHARS = 'DS$#@&%ds!?|/\\[]{}01<>';
-  const el = document.getElementById('glitch-heading');
-  const original = el.textContent;
+  const el = document.getElementById('glitch-heading');         // overlay div
+  const realEl = document.getElementById('glitch-heading-real'); // real h1
+  const wrap = document.getElementById('heading-wrap');
+  const original = realEl.textContent.trim();
 
-  // Wrap each non-space char in a span
+  // Populate overlay with spans mirroring the real text
   el.innerHTML = original.split('').map(ch =>
     ch === ' ' ? ' ' : `<span class="glitch-char">${ch}</span>`
   ).join('');
 
   const spans = Array.from(el.querySelectorAll('.glitch-char'));
 
+  // Pin the wrapper height to its natural size before any animation
+  function pinHeight() {
+    wrap.style.height = '';
+    wrap.style.height = wrap.offsetHeight + 'px';
+  }
+
+  // Start overlay hidden — only shown during glitch
+  el.style.display = 'none';
+
   function randChar() {
     return GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
   }
 
   function runGlitch() {
+    // Show overlay, hide real heading
+    el.style.display = 'block';
+    realEl.style.visibility = 'hidden';
     el.classList.add('glitching');
     setTimeout(() => el.classList.remove('glitching'), 400);
 
-    const totalDuration = 1400; // ms total animation
-    const resolveDelay  = 60;   // ms between each char resolving
+    const totalDuration = 1400;
+    const resolveDelay  = 60;
 
     // Phase 1: scramble all chars rapidly
     let scrambleInterval = setInterval(() => {
@@ -628,17 +685,12 @@ function toggleDrawer() {
       clearInterval(scrambleInterval);
       spans.forEach((s, i) => {
         setTimeout(() => {
-          // brief flicker before final
           let flickers = 0;
           const flickerInterval = setInterval(() => {
             s.textContent = flickers % 2 === 0 ? randChar() : original.replace(/ /g, '').split('')[i] || original[i];
             flickers++;
             if (flickers >= 4) {
               clearInterval(flickerInterval);
-              s.textContent = original.replace(/ /g, '')[
-                spans.indexOf(s)
-              ];
-              // rebuild correct char from original (account for spaces)
               let charIndex = 0;
               for (let c = 0; c < original.length; c++) {
                 if (original[c] !== ' ') {
@@ -650,8 +702,16 @@ function toggleDrawer() {
               s.classList.add('resolving');
               s.style.color = '';
               s.style.opacity = '';
-              // clean up class after transition
-              setTimeout(() => s.classList.remove('resolving'), 200);
+              // On last char, restore real heading and hide overlay
+              if (i === spans.length - 1) {
+                setTimeout(() => {
+                  s.classList.remove('resolving');
+                  realEl.style.visibility = '';
+                  el.style.display = 'none';
+                }, 200);
+              } else {
+                setTimeout(() => s.classList.remove('resolving'), 200);
+              }
             }
           }, 50);
         }, i * resolveDelay);
@@ -660,7 +720,12 @@ function toggleDrawer() {
   }
 
   // Trigger on load, then occasionally repeat
+  // Respects prefers-reduced-motion: skip animation for users who prefer it
   window.addEventListener('load', () => {
+    pinHeight();
+    window.addEventListener('resize', () => { pinHeight(); });
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
     setTimeout(runGlitch, 400);
     // subtle re-glitch every ~8s
     setInterval(runGlitch, 8000);
